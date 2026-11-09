@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promax Leilão | Pneus de Alta Performance</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #facc15; }
+        .view { display: none; }
+        .view.active { display: block; }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-up { animation: slideUp 0.4s ease-out forwards; }
+    </style>
+</head>
+<body class="bg-slate-950 text-white antialiased selection:bg-yellow-400 selection:text-slate-900">
+
+    <!-- VIEW: LOGIN -->
+    <div id="view-login" class="view active min-h-screen flex items-center justify-center p-4">
+        <div class="w-full max-w-md bg-slate-900 rounded-3xl shadow-2xl border border-slate-800 p-8 animate-slide-up">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-black tracking-tighter text-yellow-400 mb-2">PROMAX <span class="text-white">LEILÃO</span></h1>
+                <p class="text-slate-400">Acesse a elite dos pneus de performance</p>
+            </div>
+            <form onsubmit="handleAuth(event)" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium mb-2 text-slate-300">E-mail</label>
+                    <input required type="email" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-yellow-400 outline-none transition-all" placeholder="seu@email.com">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2 text-slate-300">Senha</label>
+                    <input required type="password" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-yellow-400 outline-none transition-all" placeholder="••••••••">
+                </div>
+                <button type="submit" class="w-full bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2">
+                    Entrar <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                </button>
+            </form>
+            <p class="text-center mt-6 text-slate-400 text-sm">
+                Não tem conta? <button onclick="switchView('view-register')" class="text-yellow-400 font-semibold hover:underline">Cadastre-se agora</button>
+            </p>
+        </div>
+    </div>
+
+    <!-- VIEW: REGISTER -->
+    <div id="view-register" class="view min-h-screen flex items-center justify-center p-4">
+        <div class="w-full max-w-md bg-slate-900 rounded-3xl shadow-2xl border border-slate-800 p-8 animate-slide-up">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-black tracking-tighter text-yellow-400 mb-2">CADASTRO</h1>
+                <p class="text-slate-400">Crie sua conta para começar a dar lances</p>
+            </div>
+            <form onsubmit="handleAuth(event)" class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2 text-slate-300">Nome</label>
+                        <input required type="text" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-yellow-400 outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2 text-slate-300">Sobrenome</label>
+                        <input required type="text" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-yellow-400 outline-none transition-all">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2 text-slate-300">E-mail</label>
+                    <input required type="email" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-yellow-400 outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2 text-slate-300">Senha</label>
+                    <input required type="password" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-yellow-400 outline-none transition-all">
+                </div>
+                <button type="submit" class="w-full bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold py-3 rounded-xl transition-all mt-4">
+                    Finalizar Cadastro
+                </button>
+            </form>
+            <button onclick="switchView('view-login')" class="w-full text-center mt-6 text-slate-400 text-sm hover:text-white transition-colors">
+                Já possuo conta. <span class="text-yellow-400 font-semibold">Fazer Login</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- VIEW: DASHBOARD -->
+    <div id="view-dashboard" class="view min-h-screen">
+        <nav class="bg-slate-900 border-b border-slate-800 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+            <h1 class="text-2xl font-black tracking-tighter text-yellow-400">PROMAX <span class="text-white">LEILÃO</span></h1>
+            <div class="flex items-center gap-6">
+                <div class="hidden md:flex items-center gap-2 text-slate-300 bg-slate-800 px-3 py-1 rounded-full text-sm border border-slate-700">
+                    <i data-lucide="user" class="w-4 h-4"></i> <span id="user-display">Usuário Promax</span>
+                </div>
+                <button onclick="switchView('view-login')" class="text-slate-400 hover:text-red-400 transition-colors">
+                    <i data-lucide="log-out" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </nav>
+
+        <main class="p-6 max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold mb-2">Catálogo de Leilões</h2>
+                    <p class="text-slate-400">Selecione o pneu ideal e dispute o melhor preço.</p>
+                </div>
+                <div class="flex gap-3">
+                    <select id="filter-brand" onchange="renderTires()" class="bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-400">
+                        <option value="Todas">Todas as Marcas</option>
+                        <option value="Michelin">Michelin</option>
+                        <option value="Pirelli">Pirelli</option>
+                        <option value="Bridgestone">Bridgestone</option>
+                        <option value="Continental">Continental</option>
+                    </select>
+                    <select id="filter-size" onchange="renderTires()" class="bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-400">
+                        <option value="Todas">Todos os Tamanhos</option>
+                        <option value="245/40 R18">245/40 R18</option>
+                        <option value="225/45 R17">225/45 R17</option>
+                        <option value="205/55 R16">205/55 R16</option>
+                        <option value="275/35 R20">275/35 R20</option>
+                    </select>
+                </div>
+            </div>
+            <div id="tires-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+        </main>
+    </div>
+
+    <!-- VIEW: AUCTION -->
+    <div id="view-auction" class="view min-h-screen">
+        <nav class="bg-slate-900 border-b border-slate-800 px-6 py-4 flex items-center gap-4 sticky top-0 z-50">
+            <button onclick="switchView('view-dashboard')" class="p-2 hover:bg-slate-800 rounded-lg transition-colors">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+            </button>
+            <h1 id="auction-title" class="text-xl font-bold">Leilão: Pneu</h1>
+        </nav>
+
+        <div class="max-w-6xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 space-y-6">
+                <div class="bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 shadow-xl">
+                    <img id="auction-img" src="" alt="Pneu" class="w-full h-96 object-cover">
+                    <div class="p-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h2 id="auction-name" class="text-4xl font-black mb-2">Marca Modelo</h2>
+                                <p id="auction-desc" class="text-slate-400 text-lg">Descrição do pneu.</p>
+                            </div>
+                            <div class="text-center bg-slate-800 p-4 rounded-2xl border border-slate-700 min-w-[120px]">
+                                <p class="text-xs text-slate-500 uppercase font-bold mb-1">Tempo Restante</p>
+                                <p id="auction-timer" class="text-3xl font-mono font-black text-yellow-400">00:60</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-4">
+                            <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700">
+                                <p class="text-slate-500 text-xs uppercase mb-1">Tamanho</p>
+                                <p id="auction-size" class="font-bold">-</p>
+                            </div>
+                            <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700">
+                                <p class="text-slate-500 text-xs uppercase mb-1">Preço Inicial</p>
+                                <p id="auction-start" class="font-bold">-</p>
+                            </div>
+                            <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700">
+                                <p class="text-slate-500 text-xs uppercase mb-1">Condição</p>
+                                <p class="font-bold">Novo / Lacrado</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-slate-900 rounded-3xl p-8 border border-slate-800">
+                    <h3 class="text-xl font-bold mb-6 flex items-center gap-2">
+                        <i data-lucide="trophy" class="text-yellow-400 w-6 h-6"></i> Histórico de Lances
+                    </h3>
+                    <div id="bids-history" class="space-y-3 max-h-64 overflow-y-auto pr-2 custom-scrollbar"></div>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <div class="bg-slate-900 p-8 rounded-3xl border-2 border-yellow-400 shadow-[0_0_30px_rgba(250,204,21,0.15)] sticky top-24">
+                    <div class="text-center mb-8">
+                        <p class="text-slate-400 uppercase text-xs font-bold mb-2">Lance Atual</p>
+                        <p id="current-bid-display" class="text-5xl font-black text-yellow-400">R$ 0</p>
+                    </div>
+                    <form onsubmit="placeBid(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-400 mb-2">Seu Lance (R$)</label>
+                            <input id="bid-input" type="number" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-4 text-2xl font-bold focus:ring-2 focus:ring-yellow-400 outline-none transition-all" placeholder="0,00">
+                        </div>
+                        <button type="submit" class="w-full bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-black py-4 rounded-xl text-xl transition-all transform active:scale-95 flex items-center justify-center gap-2">
+                            <i data-lucide="gavel" class="w-6 h-6"></i> DAR LANCE
+                        </button>
+                    </form>
+                    <div id="winning-alert" class="hidden mt-6 p-4 bg-green-500/10 border border-green-500/30 rounded-xl flex items-center gap-3 text-green-400 animate-bounce">
+                        <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+                        <p class="text-sm font-bold">Você está vencendo!</p>
+                    </div>
+                    <button id="btn-finalize" onclick="switchView('view-checkout')" class="hidden w-full mt-4 bg-white text-slate-900 font-black py-4 rounded-xl text-xl hover:bg-slate-200 transition-all">
+                        FINALIZAR COMPRA
+                    </button>
+                </div>
+                <div class="bg-slate-900/50 p-6 rounded-3xl border border-slate-800">
+                    <div class="flex items-start gap-3 text-slate-400">
+                        <i data-lucide="alert-circle" class="w-5 h-5 shrink-0 text-yellow-400"></i>
+                        <p class="text-xs leading-relaxed">Lances são irrevogáveis. Ao dar um lance, você se compromete a adquirir o produto caso vença o leilão.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW: CHECKOUT -->
+    <div id="view-checkout" class="view min-h-screen flex items-center justify-center p-4">
+        <div class="w-full max-w-2xl bg-slate-900 rounded-3xl border border-slate-800 overflow-hidden shadow-2xl">
+            <div class="bg-yellow-400 p-8 text-slate-900 flex justify-between items-center">
+                <div>
+                    <h2 class="text-3xl font-black">PARABÉNS!</h2>
+                    <p class="font-medium opacity-80">Você venceu o leilão!</p>
+                </div>
+                <i data-lucide="trophy" class="w-12 h-12"></i>
+            </div>
+            <div class="p-8">
+                <h3 class="text-xl font-bold mb-6 flex items-center gap-2">
+                    <i data-lucide="map-pin" class="text-yellow-400 w-6 h-6"></i> Endereço de Entrega
+                </h3>
+                <form onsubmit="handleCheckout(event)" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-slate-400 mb-2">Rua / Avenida</label>
+                            <input required id="addr-street" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-yellow-400" placeholder="Ex: Av. Paulista, 1000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-400 mb-2">Cidade</label>
+                            <input required id="addr-city" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-yellow-400" placeholder="São Paulo">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-400 mb-2">CEP</label>
+                            <input required id="addr-zip" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-yellow-400" placeholder="00000-000">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-black py-4 rounded-xl text-xl transition-all transform active:scale-95">
+                        CONFIRMAR E GERAR QR CODE
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW: SUCCESS -->
+    <div id="view-success" class="view min-h-screen flex items-center justify-center p-4">
+        <div class="w-full max-w-md bg-slate-900 rounded-3xl border border-slate-800 p-10 text-center shadow-2xl">
+            <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
+                <i data-lucide="check-circle-2" class="w-10 h-10 text-white"></i>
+            </div>
+            <h2 class="text-3xl font-black mb-2">PEDIDO CONFIRMADO!</h2>
+            <p class="text-slate-400 mb-8">Seu pneu está reservado. Apresente o QR Code abaixo na retirada.</p>
+            <div class="bg-white p-6 rounded-3xl inline-block mb-8 shadow-[0_0_40px_rgba(255,255,255,0.1)]">
+                <div class="bg-slate-100 p-4 rounded-2xl">
+                    <i data-lucide="qr-code" class="w-40 h-40 text-slate-900"></i>
+                </div>
+            </div>
+            <div class="bg-slate-800 p-6 rounded-2xl text-left border border-slate-700 mb-8">
+                <p class="text-xs text-slate-500 uppercase font-bold mb-3">Resumo de Entrega</p>
+                <p class="text-sm mb-1"><span class="text-slate-500">Produto:</span> <span id="res-product">-</span></p>
+                <p class="text-sm mb-1"><span class="text-slate-500">Endereço:</span> <span id="res-addr">-</span></p>
+                <p class="text-sm"><span class="text-slate-500">CEP:</span> <span id="res-zip">-</span></p>
+            </div>
+            <button onclick="resetApp()" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-4 rounded-xl transition-all">
+                Voltar ao Catálogo
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const TIRES_DATA = [
+            { id: 1, brand: 'Michelin', model: 'Pilot Sport 4S', size: '245/40 R18', startPrice: 1200, currentPrice: 1450, img: 'https://images.pexels.com/photos/29255725/pexels-photo-29255725.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940', description: 'Pneu de ultra alta performance para carros esportivos.' },
+            { id: 2, brand: 'Pirelli', model: 'P Zero', size: '225/45 R17', startPrice: 900, currentPrice: 1100, img: 'https://images.pexels.com/photos/29255733/pexels-photo-29255733.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940', description: 'Tecnologia de Fórmula 1 adaptada para as ruas.' },
+            { id: 3, brand: 'Bridgestone', model: 'Potenza', size: '205/55 R16', startPrice: 700, currentPrice: 850, img: 'https://images.pexels.com/photos/6870325/pexels-photo-6870325.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940', description: 'Equilíbrio perfeito entre durabilidade e aderência.' },
+            { id: 4, brand: 'Continental', model: 'ExtremeContact', size: '275/35 R20', startPrice: 1500, currentPrice: 1800, img: 'https://images.pexels.com/photos/35274750/pexels-photo-35274750.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940', description: 'Máxima precisão em curvas e frenagens bruscas.' },
+        ];
+
+        const BOT_NAMES = ["Ricardo Alencar", "Marcos Vinícius", "Juliana Costa", "Fernando Souza", "Beatriz Lima", "André Santos", "Cláudio Mendes", "Patrícia Rocha"];
+        
+        let state = {
+            user: { name: 'Usuário Promax' },
+            selectedTire: null,
+            bids: {},
+            timer: 60,
+            timerInterval: null,
+            botInterval: null
+        };
+
+        function switchView(viewId) {
+            document.querySelectorAll('.view').forEach(v => {
+                v.classList.remove('active');
+                v.style.display = 'none';
+            });
+            const target = document.getElementById(viewId);
+            target.classList.add('active');
+            target.style.display = 'block';
+            
+            if (viewId === 'view-auction') startAuctionLogic();
+            else stopAuctionLogic();
+            
+            setTimeout(() => lucide.createIcons(), 10);
+        }
+        function handleAuth(e) {
+            e.preventDefault();
+            switchView('view-dashboard');
+            renderTires();
+        }
+
+        function renderTires() {
+            const brand = document.getElementById('filter-brand').value;
+            const size = document.getElementById('filter-size').value;
+            const grid = document.getElementById('tires-grid');
+            grid.innerHTML = '';
+
+            TIRES_DATA.filter(t => (brand === 'Todas' || t.brand === brand) && (size === 'Todas' || t.size === size)).forEach(tire => {
+                const currentPrice = state.bids[tire.id]?.[0]?.amount || tire.currentPrice;
+                grid.innerHTML += `
+                    <div class="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden group hover:border-yellow-400/50 transition-all hover:shadow-[0_0_20px_rgba(250,204,21,0.1)]">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="${tire.img}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute top-3 right-3 bg-yellow-400 text-slate-900 text-xs font-bold px-2 py-1 rounded uppercase">Ativo</div>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h3 class="font-bold text-lg">${tire.brand}</h3>
+                                    <p class="text-slate-400 text-sm">${tire.model}</p>
+                                </div>
+                                <span class="text-xs font-mono bg-slate-800 px-2 py-1 rounded text-slate-300">${tire.size}</span>
+                            </div>
+                            <div class="mt-4 flex items-end justify-between">
+                                <div>
+                                    <p class="text-slate-500 text-xs uppercase font-semibold">Lance Atual</p>
+                                    <p class="text-2xl font-black text-yellow-400">R$ ${currentPrice.toLocaleString('pt-BR')}</p>
+                                </div>
+                                <button onclick="openAuction(${tire.id})" class="bg-white text-slate-900 p-2 rounded-lg hover:bg-yellow-400 transition-colors">
+                                    <i data-lucide="gavel" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            lucide.createIcons();
+        }
+
+        function openAuction(id) {
+            state.selectedTire = TIRES_DATA.find(t => t.id === id);
+            document.getElementById('auction-title').innerText = `Leilão: ${state.selectedTire.model}`;
+            document.getElementById('auction-name').innerText = `${state.selectedTire.brand} ${state.selectedTire.model}`;
+            document.getElementById('auction-desc').innerText = state.selectedTire.description;
+            document.getElementById('auction-img').src = state.selectedTire.img;
+            document.getElementById('auction-size').innerText = state.selectedTire.size;
+            document.getElementById('auction-start').innerText = `R$ ${state.selectedTire.startPrice}`;
+            updateAuctionDisplay();
+            switchView('view-auction');
+        }
+
+        function startAuctionLogic() {
+            state.timer = 60;
+            state.timerInterval = setInterval(() => {
+                state.timer--;
+                const timerEl = document.getElementById('auction-timer');
+                timerEl.innerText = `00:${state.timer < 10 ? '0' + state.timer : state.timer}`;
+                if (state.timer < 10) timerEl.classList.add('text-red-500', 'animate-pulse');
+                else timerEl.classList.remove('text-red-500', 'animate-pulse');
+                if (state.timer <= 0) {
+                    clearInterval(state.timerInterval);
+                    document.getElementById('btn-finalize').classList.remove('hidden');
+                }
+            }, 1000);
+
+            state.botInterval = setInterval(() => {
+                if (Math.random() > 0.7) {
+                    const botName = BOT_NAMES[Math.floor(Math.random() * BOT_NAMES.length)];
+                    const lastBid = state.bids[state.selectedTire.id]?.[0]?.amount || state.selectedTire.currentPrice;
+                    const botBid = lastBid + (Math.floor(Math.random() * 50) + 20);
+                    addBid(botName, botBid);
+                }
+            }, 4000);
+        }
+
+        function stopAuctionLogic() {
+            clearInterval(state.timerInterval);
+            clearInterval(state.botInterval);
+        }
+
+        function addBid(user, amount) {
+            const id = state.selectedTire.id;
+            if (!state.bids[id]) state.bids[id] = [];
+            state.bids[id].unshift({ user, amount, time: new Date().toLocaleTimeString() });
+            updateAuctionDisplay();
+        }
+
+        function updateAuctionDisplay() {
+            const id = state.selectedTire.id;
+            const currentPrice = state.bids[id]?.[0]?.amount || state.selectedTire.currentPrice;
+            document.getElementById('current-bid-display').innerText = `R$ ${currentPrice.toLocaleString('pt-BR')}`;
+            const history = document.getElementById('bids-history');
+            history.innerHTML = '';
+            (state.bids[id] || []).forEach(bid => {
+                const isUser = bid.user === state.user.name;
+                history.innerHTML += `
+                    <div class="flex justify-between items-center p-4 rounded-xl border transition-all ${isUser ? 'bg-yellow-400/10 border-yellow-400/30' : 'bg-slate-800/50 border-slate-700'}">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${isUser ? 'bg-yellow-400 text-slate-900' : 'bg-slate-700 text-slate-300'}">
+                                ${bid.user[0]}
+                            </div>
+                            <div>
+                                <p class="font-semibold">${bid.user} ${isUser ? '<span class="text-[10px] bg-yellow-400 text-slate-900 px-1 rounded ml-1">VOCÊ</span>' : ''}</p>
+                                <p class="text-xs text-slate-500">${bid.time}</p>
+                            </div>
+                        </div>
+                        <p class="text-lg font-black text-white">R$ ${bid.amount.toLocaleString('pt-BR')}</p>
+                    </div>
+                `;
+            });
+            lucide.createIcons();
+        }
+
+        function placeBid(e) {
+            e.preventDefault();
+            const input = document.getElementById('bid-input');
+            const amount = parseFloat(input.value);
+            const lastBid = state.bids[state.selectedTire.id]?.[0]?.amount || state.selectedTire.currentPrice;
+            if (amount <= lastBid) {
+                alert("O lance deve ser maior que o lance atual!");
+                return;
+            }
+            addBid(state.user.name, amount);
+            input.value = '';
+            document.getElementById('winning-alert').classList.remove('hidden');
+        }
+
+        function handleCheckout(e) {
+            e.preventDefault();
+            document.getElementById('res-product').innerText = state.selectedTire.model;
+            document.getElementById('res-addr').innerText = document.getElementById('addr-street').value + ', ' + document.getElementById('addr-city').value;
+            document.getElementById('res-zip').innerText = document.getElementById('addr-zip').value;
+            switchView('view-success');
+        }
+
+        function resetApp() {
+            document.getElementById('winning-alert').classList.add('hidden');
+            document.getElementById('btn-finalize').classList.add('hidden');
+            switchView('view-dashboard');
+            renderTires();
+        }
+
+        window.onload = () => {
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>
